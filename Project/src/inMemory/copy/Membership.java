@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Membership  {
 	
 
-	static ManageBooks manageBooks = new ManageBooks();
+//	static ManageBooks manageBooks = new ManageBooks();
 	static ArrayList<Account> accountList = new ArrayList<>();
 	
 	
