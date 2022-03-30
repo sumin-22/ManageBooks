@@ -23,14 +23,12 @@ public class Util {
 	//문자열 입력 받기
 	public static String readLine() {
 		scanner = new Scanner(System.in);
-		String line;
 		try {
-			line = scanner.nextLine();
-			
+			return scanner.nextLine();
+		
 		} catch (NoSuchElementException e) {
-			line = null;
+			throw new NoSuchElementException("NoSuchElementException");
 		}
-		return line;
 		
 	}
 

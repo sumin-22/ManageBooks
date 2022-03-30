@@ -25,9 +25,10 @@ public class Util {
     	scanner = new Scanner(System.in);
         String line;
         try {
-            line = scanner.nextLine();
+        	return scanner.nextLine();
         }
         catch (NoSuchElementException e) {
+        	
             line = null;
         }
         return line;

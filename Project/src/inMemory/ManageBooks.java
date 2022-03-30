@@ -4,7 +4,6 @@ public class ManageBooks {
 	public static void main(String[] args) {
 		
 		Membership membership = new Membership();
-		Login login = new Login();
 		
 		boolean isTerminae = false;
 		do {
@@ -13,16 +12,16 @@ public class ManageBooks {
 			
 			switch (choice) {
 				case 1: 
-					System.out.println(membership);
+					membership.membership();
 					break;
 				case 2:
-					System.out.println(login);
+					membership.login();
 					break;
 				case 3:
 					isTerminae = true;
 					break;
 				default:
-					System.err.println("선택 불가능한 숫자입니다. 다시 입력해주세요");
+					System.err.println("유효하지 않은 번호입니다. 다시 입력해주세요");
 			}
 		} while(!isTerminae);
 
