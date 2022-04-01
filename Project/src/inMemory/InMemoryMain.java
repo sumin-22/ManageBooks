@@ -1,9 +1,9 @@
 package inMemory;
 
-public class ManageBooks {
+public class InMemoryMain {
 	public static void main(String[] args) {
 		
-		Membership membership = new Membership();
+		InMemory membership = new InMemory();
 		
 		boolean isTerminae = false;
 		do {

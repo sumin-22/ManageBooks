@@ -2,7 +2,7 @@ package inMemory;
 
 import java.util.ArrayList;
 
-public class Membership {
+public class InMemory {
 	
 	//관리자 아이디와 비밀번호
 	String ADMIN_ID = "cjstk4";
