@@ -8,7 +8,11 @@ public class InMemory {
 	String ADMIN_ID = "cjstk4";
 	String ADMIN_PW = "1230";
 	
-	static ArrayList<Account> accountlist = new ArrayList<Account>();
+	//관리자 로그인 상태
+	boolean ADMIN_LOGIN_STATUS = false;
+	ArrayList<Account> accountlist = new ArrayList<Account>();
+	ArrayList<Books> booksList = new ArrayList<Books>();
+	
 	
 	public void membership() {
 		System.out.println("1.회원가입 진행 2.비밀번호 변경");
@@ -71,7 +75,7 @@ public class InMemory {
 		accountlist.add(account);
 	}
 	
-	//이름, 생년월일 중복 검사
+	//폰번호 중복 검사
 	private boolean isDuplicatedphone(String cellphone) {
 		for(int i =0; i < accountlist.size(); i++) {
 			if(accountlist.get(i).getCellphone().equals(cellphone)) {
@@ -93,6 +97,9 @@ public class InMemory {
 	}
 	
 	private Account login(String id, String password) {
+		
+		ADMIN_LOGIN_STATUS = false;
+		
 		for(int i=0; i<accountlist.size(); i++) {
 			if(accountlist.get(i).getId().equals(id) && accountlist.get(i).getPassword().equals(password)) {
 				return accountlist.get(i);
@@ -141,7 +148,7 @@ public class InMemory {
 		
 		switch (choice) {
 			case 1 : 
-				
+				memberMenu();
 				break;
 			case 2 :
 				adminMenu();
@@ -152,15 +159,100 @@ public class InMemory {
 		}
 	}
 	
-	private void adminMenu() {
-		System.out.print("-관리자 아이디 : ");
-		String adminId = Util.readLine();
-		System.out.print("-관리자 비밀번호 : ");
-		String adminPw = Util.readLine();
+	private void memberMenu() {
+		System.out.print("아이디 : ");
+		String id = Util.readLine();
+		System.out.print("비밀번호 : ");
+		String password = Util.readLine();
 		
-		if(!ADMIN_ID.equals(adminId) || !ADMIN_PW.equals(adminPw)) {
-			System.err.println("관리자 아이디 또는 패스워드가 일치하지 않습니다.");
+		Account loginAccount = login(id, password);
+		
+		if (loginAccount == null) {
+			System.err.println("아이디 또는 패스워드가 일치하지 않습니다.");
 			return;
+		}
+		
+		System.out.println("1.도서검색 2.대여현황 3.도서대여 4.도서반납");
+		int choice = Util.readInt();
+		
+		switch (choice) {
+			case 1 : 
+				searchBooks();
+				break;
+			case 2:
+				//borrowStatus();
+				break;
+			case 3 :
+				//borrowBooks
+				break;
+			case 4 :
+				//returnBooks
+				break;
+			default :
+				System.err.println("유효하지 않은 번호입니다. 다시 입력해주세요");
+				break;
+		}
+		
+	}
+	
+	private void searchBooks() {
+		System.out.print("- 도서명 : ");
+		String title = Util.readLine();
+		
+		System.out.print("- 저자 : ");
+		String author = Util.readLine();
+		
+		System.out.println("<도서 검색 결과>");
+		boolean isExistList = false;
+		
+		for(int i =0; i < booksList.size(); i++) {
+			if(booksList.get(i).getTitle().equals(title) || booksList.get(i).getAuthor().equals(author)) {
+				String bookInfo = "> 도서명 : " + booksList.get(i).getTitle();
+				bookInfo += " | 저자 : " + booksList.get(i).getAuthor();
+				bookInfo += " | 출판사 : " + booksList.get(i).getPublisher();
+				
+				String borrowResult = booksList.get(i).getBorrower()=="" ? "대여가능" : "대여중";
+				bookInfo += " | 대여상태 : " + borrowResult;
+				System.out.println(bookInfo);
+				isExistList = true;
+			}
+		}
+		if (!isExistList) {
+			System.out.println("> 검색된 도서가 없습니다");
+		}
+		
+	}
+	
+	//대여현황
+	private void borrowStatus() {
+		System.out.println("< 대여현황 >");
+		boolean isExistList = false;
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+// -------------------------------------------------------------------
+	private void adminMenu() {
+		if(!ADMIN_LOGIN_STATUS) {
+			
+			System.out.print("-관리자 아이디 : ");
+			String adminId = Util.readLine();
+			System.out.print("-관리자 비밀번호 : ");
+			String adminPw = Util.readLine();
+			
+			if(!ADMIN_ID.equals(adminId) || !ADMIN_PW.equals(adminPw)) {
+				System.err.println("관리자 아이디 또는 패스워드가 일치하지 않습니다.");
+				return;
+			} else {
+				ADMIN_LOGIN_STATUS = true;
+			}
 		}
 		
 		System.out.println("1.회원관리 2.도서관리");
@@ -171,6 +263,7 @@ public class InMemory {
 				managerMember();
 				break;
 			case 2:
+				//managerBook();
 				break;
 			default:
 				System.err.println("유효하지 않은 번호입니다. 다시 입력해주세요");
@@ -188,17 +281,24 @@ public class InMemory {
 	}
 	
 	private void memberReuslt(String name, String birthDate) {
-		String resultId = "";
+		Account resultAccount = null;
 		for(int i =0; i <accountlist.size(); i++) {
 			if(accountlist.get(i).getName().equals(name) && accountlist.get(i).getBirthDate().equals(birthDate)) {
-				resultId = accountlist.get(i).getId();
+				resultAccount = accountlist.get(i);
 				break;
 			}
 		}
-		if (resultId.equals("")) {
+		if (resultAccount.equals("")) {
 			System.err.println("일치하는 회원정보가 없습니다.");
 			return;
 		}
+		
+		System.out.println("< 회원 정보 >");
+		System.out.println("> 회원명 : " + resultAccount.getName());
+		System.out.println("> 생년월일 : " + resultAccount.getBirthDate());
+		System.out.println("> 휴대폰 : " + resultAccount.getCellphone());
+		System.out.println("> 아이디 : " + resultAccount.getId());
+		
 	}
 	
 	
