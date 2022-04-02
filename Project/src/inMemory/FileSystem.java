@@ -12,7 +12,7 @@ public class FileSystem {
 		
 	//관리자 로그인 상태
 	boolean ADMIN_LOGIN_STATUS =  false;
-	ArrayList<Account> accountlist = new ArrayList<Account>();
+	ArrayList<Account> accountList = new ArrayList<Account>();
 	ArrayList<Books> booksList = new ArrayList<Books>();
 	
 	
@@ -33,7 +33,7 @@ public class FileSystem {
 	private void createAccount() {
 		System.out.print("- 이름 : ");
 		String name = Util.readLine();
-		System.out.print("- 생년월일(8자리) : ");
+		System.out.print("-생년월일(ex.19951230) : ");
 		String birthDate = Util.readLine();
 		
 		System.out.print("- 핸드폰 번호(ex.010-1230-0901) : ");
@@ -77,8 +77,8 @@ public class FileSystem {
 	//폰번호 중복 검사
 	private boolean isDuplicatedphone(String cellphone) {
 		ArrayList<Account> accountArray = Util.fileToAccount("./file/account.txt");
-		for(int i =0; i < accountlist.size(); i++) {
-			if(accountlist.get(i).getCellphone().equals(cellphone)) {
+		for(int i =0; i < accountList.size(); i++) {
+			if(accountList.get(i).getCellphone().equals(cellphone)) {
 				return true;
 			}
 		}
@@ -90,8 +90,8 @@ public class FileSystem {
 	//ID 중복검사
 	private boolean isDuplicatedId(String id) {
 		ArrayList<Account> accountArray = Util.fileToAccount("./file/account.txt");
-		for(int i =0; i < accountlist.size(); i++) {
-			if(accountlist.get(i).getId().equals(id)) {
+		for(int i =0; i < accountList.size(); i++) {
+			if(accountList.get(i).getId().equals(id)) {
 				return true;
 			}
 		}
@@ -362,8 +362,18 @@ public class FileSystem {
 			 String adminId = Util.readLine();
 			 System.out.print("관리자 비밀번호 : ");
 			 String adminPw = Util.readLine();
-		    	
-			 if(!ADMIN_ID.equals(adminId) || !ADMIN_PW.equals(adminPw)) {
+			 
+			 ArrayList<String> adminAccount = Util.readFileLine("./file/admin.txt");
+			 
+			 if(adminAccount==null || adminAccount.size() < 1) {
+				 System.err.println("관리자 계정이 설정되지 않았습니다.");
+				 return;
+			 }
+			 
+			 String fileAdminId = adminAccount.get(0);
+			 String fileAdminPw = adminAccount.get(1);
+			 
+			 if(!fileAdminId.equals(adminId) || !fileAdminPw.equals(adminPw)) {
 				 System.err.println("관리자 아이디 또는 비밀번호가 일치하지 않습니다.");
 				 return;
 			 } else {
@@ -399,9 +409,10 @@ public class FileSystem {
     
 	private void memberReuslt(String name, String birthDate) {
 		Account resultAccount = null;
-    	for(int i=0; i< accountlist.size(); i++) {
-    		if(accountlist.get(i).getName().equals(name) && accountlist.get(i).getBirthDate().equals(birthDate)) {
-    			resultAccount = accountlist.get(i);
+		ArrayList<Account> accountArray = Util.fileToAccount("./file/account.txt");
+    	for(int i=0; i<accountArray.size(); i++) {
+    		if(accountArray.get(i).getName().equals(name) && accountArray.get(i).getBirthDate().equals(birthDate)) {
+    			resultAccount = accountArray.get(i);
     			break;	
     		}
     	}
@@ -420,14 +431,15 @@ public class FileSystem {
     	
     	System.out.println("<도서 대여 정보>");
     	boolean isExistList = false; 
-    	for(int i=0; i<booksList.size(); i++) {
+    	ArrayList<Books> booksArray = Util.fileToBooks("./file/books.txt");
+    	for(int i=0; i<booksArray.size(); i++) {
     		
-    		if(booksList.get(i).getBorrower().equals(resultAccount.getId())) {
-    			String bookInfo = "> 도서명 : " + booksList.get(i).getTitle();
-    			bookInfo += " | " + "저자 : " + booksList.get(i).getAuthor();
-    			bookInfo += " | " + "출판사 : " + booksList.get(i).getPublisher();
-    			bookInfo += " | " + "대여일 : " + booksList.get(i).getRentalDate();
-    			bookInfo += " | " + "반납일 : " + booksList.get(i).getReturnDate();
+    		if(booksArray.get(i).getBorrower().equals(resultAccount.getId())) {
+    			String bookInfo = "> 도서명 : " + booksArray.get(i).getTitle();
+    			bookInfo += " | " + "저자 : " + booksArray.get(i).getAuthor();
+    			bookInfo += " | " + "출판사 : " + booksArray.get(i).getPublisher();
+    			bookInfo += " | " + "대여일 : " + booksArray.get(i).getRentalDate();
+    			bookInfo += " | " + "반납일 : " + booksArray.get(i).getReturnDate();
       
     			System.out.println(bookInfo);
     			isExistList = true;
@@ -452,31 +464,41 @@ public class FileSystem {
     }
 	
 	private void saveBooks(String title, String author, String publisher) {
+		ArrayList<Books> booksArray;
+		
+		
 		if(title != "" && author != "" && publisher != "") {
-			//중복 check
-			for(int i=0; i<booksList.size(); i++) {
-				if(booksList.get(i).getTitle().equals(title)
-						&& booksList.get(i).getAuthor().equals(author)
-						&& booksList.get(i).getPublisher().equals(publisher)) {
+			
+			booksArray = Util.fileToBooks("./file/books.txt");
+			for(int i=0; i<booksArray.size(); i++) {
+				if(booksArray.get(i).getTitle().equals(title)
+						&& booksArray.get(i).getAuthor().equals(author)
+						&& booksArray.get(i).getPublisher().equals(publisher)) {
 					System.err.println("이미 등록된 도서 입니다.");
 					return;
 				}
 			}
 			
 		
-			Books books = new Books(title, author, publisher, "", "", "");
-			booksList.add(books);
-			System.out.println("등록 되었습니다.");
+			Books books = new Books(title, author, publisher, "none", "none", "none");
+			
+			
+			String inputText = books.toString()+"\r\n";
+			
+			if(Util.writerFileLine("./file/books.txt", inputText)) {
+				System.out.println("도서 정보가 저장 되었습니다.");
+			}
 		} else {
 			System.err.println("미입력 값이 있습니다.");
 		} 
 		
+		
 		System.out.println("<등록된 도서 리스트>");
-		for(int i=0; i<booksList.size(); i++) {
-			System.out.println(booksList.get(i).toString());
+		booksArray = Util.fileToBooks("./file/books.txt");
+		for(int i=0; i<booksArray.size(); i++) {
+			System.out.println(booksArray.get(i).toString());
 		}
 	}
-	
 	
 	
 
