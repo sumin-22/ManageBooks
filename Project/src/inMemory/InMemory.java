@@ -223,7 +223,7 @@ public class InMemory {
     	}
     	
     	if(!isExistList) {
-    		System.out.println("> 검색된 도서가 없습니다.");
+    		System.out.println("검색된 도서가 없습니다.");
     	}
     }
 	
@@ -247,7 +247,7 @@ public class InMemory {
     	}
     	
     	if(!isExistList) {
-    		System.out.println("> 대여중인 도서가 없습니다.");
+    		System.out.println("대여중인 도서가 없습니다.");
     	}
     }	
 	
