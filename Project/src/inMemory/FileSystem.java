@@ -64,7 +64,6 @@ public class FileSystem {
 		
 		saveAccount(name, birthDate, cellphone, id, password);
 	}
-
 	
 	//회원정보 저장
 	private void saveAccount(String name, String birthDate, String cellphone, String id, String password) {
@@ -182,16 +181,16 @@ public class FileSystem {
         int choice = Util.readInt();
         
         switch (choice) {
-	        case 1:	//1.도서검색
+	        case 1:	
 	        	searchBooks();
 	        	break;
-	        case 2: //2.대여현황
+	        case 2: 
 	        	borrowStatus();
 	        	break;
-	        case 3:	//3.도서대여
+	        case 3:	
 	        	borrowBooks(loginAccount.getId());
 	            break;
-	        case 4: //4.도셔반납
+	        case 4: 
 	        	returnBooks(loginAccount.getId());
 	        	break;
 	        default:
