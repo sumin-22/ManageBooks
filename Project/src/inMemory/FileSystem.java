@@ -358,7 +358,6 @@ public class FileSystem {
 	}
 // -------------------------------------------------------------------	
 	private void adminMenu() {
-		//관리자 로그인 상태가 아닐때만 로그인 처리 
 		if(!ADMIN_LOGIN_STATUS) {
 			 System.out.print("관리자 아이디 : ");
 			 String adminId = Util.readLine();
@@ -377,10 +376,10 @@ public class FileSystem {
         int choice = Util.readInt();
         
         switch (choice) {
-	        case 1:	//1.회원관리
+	        case 1:	
 	        	manageMember();
 	            break;
-	        case 2: //2.도서관리
+	        case 2: 
 	            manageBooks();
 	            break;
 	        default:
@@ -402,13 +401,12 @@ public class FileSystem {
 	private void memberReuslt(String name, String birthDate) {
 		Account resultAccount = null;
     	for(int i=0; i< accountlist.size(); i++) {
-    		//루프를 돌면서 조건에 맞으면 ID를 뽑아 낸다
     		if(accountlist.get(i).getName().equals(name) && accountlist.get(i).getBirthDate().equals(birthDate)) {
     			resultAccount = accountlist.get(i);
-    			break;	//for문 종료
+    			break;	
     		}
     	}
-    	//검색된 Account 클래스가 없으면 종료
+    	
     	if(resultAccount == null) {
     		System.err.println("일치하는 회원정보가 없습니다.");
     		return;
@@ -424,7 +422,7 @@ public class FileSystem {
     	System.out.println("<도서 대여 정보>");
     	boolean isExistList = false; 
     	for(int i=0; i<booksList.size(); i++) {
-    		//도서 목록의 대여자 정보가 검색한 회원의 아이디와 일치
+    		
     		if(booksList.get(i).getBorrower().equals(resultAccount.getId())) {
     			String bookInfo = "> 도서명 : " + booksList.get(i).getTitle();
     			bookInfo += " | " + "저자 : " + booksList.get(i).getAuthor();
@@ -455,7 +453,6 @@ public class FileSystem {
     }
 	
 	private void saveBooks(String title, String author, String publisher) {
-		// 편안한 테스트를 위해서 아무것도 입력 안하면 전체 리스트를 그냥 보여준다
 		if(title != "" && author != "" && publisher != "") {
 			//중복 check
 			for(int i=0; i<booksList.size(); i++) {
@@ -467,17 +464,14 @@ public class FileSystem {
 				}
 			}
 			
-			//Books 클래스 생성
-			//대여자와 대여일, 반납일은 ""로 초기값 저장
+		
 			Books books = new Books(title, author, publisher, "", "", "");
-			//Books ArrayList에 저장
 			booksList.add(books);
 			System.out.println("등록 되었습니다.");
 		} else {
 			System.err.println("미입력 값이 있습니다.");
 		} 
 		
-		//저장이 완료 되면 도서 별 대여 여부 확인 겸 전제 리스트를 출력
 		System.out.println("<등록된 도서 리스트>");
 		for(int i=0; i<booksList.size(); i++) {
 			System.out.println(booksList.get(i).toString());
