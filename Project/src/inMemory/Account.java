@@ -62,8 +62,8 @@ package inMemory;
 
 	@Override
 	public String toString() {
-		return "Account [name=" + name + ", birthDate=" + birthDate + ", cellphone=" + cellphone + ", id=" + id
-				+ ", password=" + password + "]";
+		return name + "," + birthDate + "," + cellphone + "," + id
+				+ "," + password;
 	}
 	
 	

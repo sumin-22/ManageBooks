@@ -67,7 +67,7 @@ public class Util {
 	}
 	
 	//파일에 텍스트 쓰기
-	public static boolean writerFileLine(String path, String text) {
+	public static boolean writeFileLine(String path, String text) {
 		boolean result = true;
 		try {
 			FileWriter fw = new FileWriter(path, true);
