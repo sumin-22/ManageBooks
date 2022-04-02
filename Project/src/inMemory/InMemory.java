@@ -1,6 +1,8 @@
 package inMemory;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class InMemory {
 	
@@ -180,13 +182,13 @@ public class InMemory {
 				searchBooks();
 				break;
 			case 2:
-				//borrowStatus();
+				borrowStatus();
 				break;
 			case 3 :
-				//borrowBooks
+				borrowBooks(loginAccount.getId());
 				break;
 			case 4 :
-				//returnBooks
+				returnBooks(loginAccount.getId());
 				break;
 			default :
 				System.err.println("유효하지 않은 번호입니다. 다시 입력해주세요");
@@ -228,15 +230,94 @@ public class InMemory {
 		System.out.println("< 대여현황 >");
 		boolean isExistList = false;
 		
+		for(int i =0; i < booksList.size(); i++) {
+			if(!booksList.get(i).getBorrower().equals(null)) {
+				String bookInfo = "> 도서명 : " + booksList.get(i).getTitle();
+				bookInfo += " | 저자 : " + booksList.get(i).getAuthor();
+				bookInfo += " | 출판사 : " + booksList.get(i).getPublisher();
+				bookInfo += " | 대여일 : " + booksList.get(i).getRentalDate();
+				bookInfo += " | 반납일 : " + booksList.get(i).getReturnDate();
+				
+				System.out.println(bookInfo);
+				isExistList = true;
+			}
+		}
+		if (!isExistList) {
+			System.out.println("대여중인 도서가 없습니다.");
+		}
 	}
 	
+	//대여도서 수
+	private int countBorrowBooks(String id) {
+		int countBooks = 0;
+		for (int i =0; i <booksList.size(); i++) {
+			if(booksList.get(i).getBorrower().equals(id)) {
+				countBooks++;
+			}
+		}
+		return countBooks;
+	}
 	
+	//도서 대여
+	private void borrowBooks(String id) {
+		if (countBorrowBooks(id) > 2) {
+			System.err.println("인당 대여가능한 권수는 3권입니다. 반납 후 이용해주세요");
+			return;
+		}
+		System.out.print("- 도서명 : ");
+		String title = Util.readLine();
+		System.out.print("- 저자 : ");
+		String author = Util.readLine();
+		
+		for(int i = 0;  i<booksList.size(); i++) {
+			if( booksList.get(i).getTitle().equals(title) && booksList.get(i).getAuthor().equals(author)) {
+				if(!booksList.get(i).getBorrower().equals(null)) {
+					System.err.println("현재 대여중인 도서입니다.");
+					return;
+				}
+				//대여정보 입력
+				booksList.get(i).setBorrower(id);
+				
+				Date today = new Date();
+				booksList.get(i).setRentalDate(Util.changeDateFormat(today));
+				
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(today);
+				cal.add(Calendar.DATE, 14); 
+				Date twoWeeksAfter = cal.getTime();
+				booksList.get(i).setReturnDate(Util.changeDateFormat(twoWeeksAfter));
+				System.out.println(title + "을(를) 대여하였습니다.");
+				return;
+			}
+		}
+		System.err.print("검색된 도서가 없습니다.");
+	}
 	
+	private void returnBooks(String id) {
+		if (countBorrowBooks(id) < 1) {
+			System.out.println("대여중인 도서가 없습니다.");
+			return;
+		}
+		
+		System.out.print("- 도서명 : ");
+		String title = Util.readLine();
+		
+		System.out.print("- 저자 : ");
+		String author = Util.readLine();
+		
+		for(int i = 0; i < booksList.size(); i++) {
+			if (booksList.get(i).getTitle().equals(title) && booksList.get(i).getAuthor().equals(author)&& booksList.get(i).getBorrower().equals(id)) {
+				booksList.get(i).setBorrower(null);
+				booksList.get(i).setReturnDate(null);
+				booksList.get(i).setRentalDate(null);
+				System.out.println(title + "을(를) 반납하였습니다.");
+				return;
+			}
+		}
+		System.err.println("반납할 수 있는 도서가 아닙니다.");
+	}
 	
-	
-	
-	
-	
+
 	
 // -------------------------------------------------------------------
 	private void adminMenu() {
@@ -260,10 +341,10 @@ public class InMemory {
 		
 		switch (choice) {
 			case 1:
-				managerMember();
+				manageMember();
 				break;
 			case 2:
-				//managerBook();
+				managerBook();
 				break;
 			default:
 				System.err.println("유효하지 않은 번호입니다. 다시 입력해주세요");
@@ -271,7 +352,8 @@ public class InMemory {
 		}
 	}
 	
-	private void managerMember() {
+
+	private void manageMember() {
 		System.out.print("-회원 이름 : ");
 		String name = Util.readLine();
 		System.out.print("-회원 생년월일 : ");
@@ -299,12 +381,64 @@ public class InMemory {
 		System.out.println("> 휴대폰 : " + resultAccount.getCellphone());
 		System.out.println("> 아이디 : " + resultAccount.getId());
 		
+		System.out.println();
+		System.out.println("< 도서 대여 정보 >");
+		boolean isExitList = false;
+		for(int i =0; i< booksList.size(); i++) {
+			if (booksList.get(i).getBorrower().equals(resultAccount.getId())) {
+				String bookInfo = "> 도서명 : " +  booksList.get(i).getTitle();
+				bookInfo += " | 저자 : " + booksList.get(i).getAuthor();
+				bookInfo += " | 출판사 : " + booksList.get(i).getPublisher();
+				bookInfo += " | 대여일 : " + booksList.get(i).getRentalDate();
+				bookInfo += " | 반납일 : " + booksList.get(i).getReturnDate();
+				
+				System.out.println(bookInfo);
+				isExitList = true;
+			}
+		}
+		if (!isExitList) {
+			System.out.println("대여 중인 도서가 없습니다.");
+		}
+		
+	}
+	
+	//도서관리
+	private void managerBook() {
+		System.out.print("- 도서명 : ");
+		String title = Util.readLine();
+		System.out.print("- 저자 : ");
+		String author = Util.readLine();
+		System.out.print("- 출판사 : ");
+		String publisher = Util.readLine();
+		
+		saveBooks(title, author, publisher);
+		
+	}
+
+	private void saveBooks(String title, String author, String publisher) {
+		if(title != "" && author != "" &&  publisher != "") {
+			for(int i =0; i <booksList.size(); i++) {
+				if (booksList.get(i).getTitle().equals(title) && booksList.get(i).getAuthor().equals(author) && booksList.get(i).getPublisher().equals(publisher)) {
+					System.err.println("이미 등록된 도서입니다.");
+					return;
+				}
+			}
+			
+			Books books = new Books(title, author, publisher, null, null, null);
+			booksList.add(books);
+			System.out.println("등록 되었습니다.");
+		} else {
+			System.err.println("미입력 항목이 있습니다.");
+		}
+		System.out.println("< 동록된 도서 리스트 >");
+		for(int i =0; i < booksList.size(); i++) {
+			System.out.println(booksList.get(i).toString());
+		}
+		
 	}
 	
 	
 	
 	
 	
-	
-
 }

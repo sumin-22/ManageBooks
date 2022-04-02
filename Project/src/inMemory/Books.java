@@ -9,14 +9,14 @@ public class Books {
 	String rentalDate;
 	String returnDate;
 	
-	public Books(String title, String author, String publisher) {
+	public Books(String title, String author, String publisher, String borrower, String rentalDate, String returnDate) {
 		super();
 		this.title = title;
 		this.author = author;
 		this.publisher = publisher;
-		this.borrower = "";
-		this.rentalDate = null;
-		this.returnDate = null;
+		this.borrower = borrower;
+		this.rentalDate = rentalDate;
+		this.returnDate = returnDate;
 	
 	}
 
