@@ -157,7 +157,7 @@ public class InMemory {
 				break;
 			default:
 				System.out.println("유효하지 않은 번호입니다. 다시 입력해주세요");
-				break;
+				return;
 		}
 	}
 	
@@ -198,54 +198,58 @@ public class InMemory {
 	}
 	
 	private void searchBooks() {
-		System.out.print("- 도서명 : ");
-		String title = Util.readLine();
-		
-		System.out.print("- 저자 : ");
-		String author = Util.readLine();
-		
-		System.out.println("<도서 검색 결과>");
-		boolean isExistList = false;
-		
-		for(int i =0; i < booksList.size(); i++) {
-			if(booksList.get(i).getTitle().equals(title) || booksList.get(i).getAuthor().equals(author)) {
-				String bookInfo = "> 도서명 : " + booksList.get(i).getTitle();
-				bookInfo += " | 저자 : " + booksList.get(i).getAuthor();
-				bookInfo += " | 출판사 : " + booksList.get(i).getPublisher();
-				
-				String borrowResult = booksList.get(i).getBorrower()=="" ? "대여가능" : "대여중";
-				bookInfo += " | 대여상태 : " + borrowResult;
-				System.out.println(bookInfo);
-				isExistList = true;
-			}
-		}
-		if (!isExistList) {
-			System.out.println("> 검색된 도서가 없습니다");
-		}
-		
-	}
+    	System.out.print("- 도서명 : ");
+    	String title = Util.readLine();
+    	
+    	System.out.print("- 저자 : ");
+    	String author = Util.readLine();
+    	
+    	System.out.println("<도서 검색 결과>");
+    	boolean isExistList = false; 
+    	
+    	for(int i=0; i<booksList.size(); i++) {
+    		if(booksList.get(i).getTitle().equals(title)
+    				|| booksList.get(i).getAuthor().equals(author)) {
+    			String bookInfo = "> 도서명 : " + booksList.get(i).getTitle();
+    			bookInfo += " | " + "저자 : " + booksList.get(i).getAuthor();
+    			bookInfo += " | " + "출판사 : " + booksList.get(i).getPublisher();
+      
+    			//대여한 회원 id가 없으면 대여 가능
+    			String borrowResult = booksList.get(i).getBorrower()=="" ? "대여가능" : "대여중"; 
+    			bookInfo += " | " + "대여상태 : " + borrowResult;
+    			System.out.println(bookInfo);
+    			isExistList = true;
+    		}
+    	}
+    	
+    	if(!isExistList) {
+    		System.out.println("> 검색된 도서가 없습니다.");
+    	}
+    }
 	
 	//대여현황
 	private void borrowStatus() {
-		System.out.println("< 대여현황 >");
-		boolean isExistList = false;
-		
-		for(int i =0; i < booksList.size(); i++) {
-			if(!booksList.get(i).getBorrower().equals(null)) {
-				String bookInfo = "> 도서명 : " + booksList.get(i).getTitle();
-				bookInfo += " | 저자 : " + booksList.get(i).getAuthor();
-				bookInfo += " | 출판사 : " + booksList.get(i).getPublisher();
-				bookInfo += " | 대여일 : " + booksList.get(i).getRentalDate();
-				bookInfo += " | 반납일 : " + booksList.get(i).getReturnDate();
-				
-				System.out.println(bookInfo);
-				isExistList = true;
-			}
-		}
-		if (!isExistList) {
-			System.out.println("대여중인 도서가 없습니다.");
-		}
-	}
+    	System.out.println("<대여 현황>");
+    	boolean isExistList = false; 
+    	
+    	for(int i=0; i<booksList.size(); i++) {
+    		//대여중인 상태만 골라서 리스트로 보여준다
+    		if(!booksList.get(i).getBorrower().equals("")) {
+    			String bookInfo = "> 도서명 : " + booksList.get(i).getTitle();
+    			bookInfo += " | " + "저자 : " + booksList.get(i).getAuthor();
+    			bookInfo += " | " + "출판사 : " + booksList.get(i).getPublisher();
+    			bookInfo += " | " + "대여일 : " + booksList.get(i).getRentalDate();
+    			bookInfo += " | " + "반납일 : " + booksList.get(i).getReturnDate();
+      
+    			System.out.println(bookInfo);
+    			isExistList = true;
+    		}
+    	}
+    	
+    	if(!isExistList) {
+    		System.out.println("> 대여중인 도서가 없습니다.");
+    	}
+    }	
 	
 	//대여도서 수
 	private int countBorrowBooks(String id) {
@@ -260,22 +264,27 @@ public class InMemory {
 	
 	//도서 대여
 	private void borrowBooks(String id) {
-		if (countBorrowBooks(id) > 2) {
-			System.err.println("인당 대여가능한 권수는 3권입니다. 반납 후 이용해주세요");
+		if(countBorrowBooks(id) > 2) {
+			System.err.println("인당 대여가능한 권수는 3권 입니다. 반납후에 대여 가능합니다.");
 			return;
 		}
-		System.out.print("- 도서명 : ");
-		String title = Util.readLine();
-		System.out.print("- 저자 : ");
-		String author = Util.readLine();
 		
-		for(int i = 0;  i<booksList.size(); i++) {
-			if( booksList.get(i).getTitle().equals(title) && booksList.get(i).getAuthor().equals(author)) {
-				if(!booksList.get(i).getBorrower().equals(null)) {
-					System.err.println("현재 대여중인 도서입니다.");
+    	System.out.print("- 도서명 : ");
+    	String title = Util.readLine();
+    	
+    	System.out.print("- 저자 : ");
+    	String author = Util.readLine();
+    	
+    	for(int i=0; i<booksList.size(); i++) {
+			if(booksList.get(i).getTitle().equals(title)
+					&& booksList.get(i).getAuthor().equals(author)) {
+				
+				if(!booksList.get(i).getBorrower().equals("")) {
+					System.err.println("현재 대여중인 도서 입니다.");
 					return;
 				}
-				//대여정보 입력
+				
+				//대여 정보를 입력
 				booksList.get(i).setBorrower(id);
 				
 				Date today = new Date();
@@ -283,15 +292,16 @@ public class InMemory {
 				
 				Calendar cal = Calendar.getInstance();
 				cal.setTime(today);
-				cal.add(Calendar.DATE, 14); 
+				cal.add(Calendar.DATE, 14); //14일 더하기
 				Date twoWeeksAfter = cal.getTime();
 				booksList.get(i).setReturnDate(Util.changeDateFormat(twoWeeksAfter));
 				System.out.println(title + "을(를) 대여하였습니다.");
-				return;
+				return; //borrowBooks 매소드를 끝내도록 처리
 			}
 		}
-		System.err.print("검색된 도서가 없습니다.");
-	}
+    	
+    	System.err.print("검색된 도서가 없습니다.");
+    }
 	
 	private void returnBooks(String id) {
 		if (countBorrowBooks(id) < 1) {
@@ -321,20 +331,21 @@ public class InMemory {
 	
 // -------------------------------------------------------------------
 	private void adminMenu() {
+		//관리자 로그인 상태가 아닐때만 로그인 처리 
 		if(!ADMIN_LOGIN_STATUS) {
-			
-			System.out.print("-관리자 아이디 : ");
-			String adminId = Util.readLine();
-			System.out.print("-관리자 비밀번호 : ");
-			String adminPw = Util.readLine();
-			
-			if(!ADMIN_ID.equals(adminId) || !ADMIN_PW.equals(adminPw)) {
-				System.err.println("관리자 아이디 또는 패스워드가 일치하지 않습니다.");
-				return;
-			} else {
-				ADMIN_LOGIN_STATUS = true;
-			}
+			 System.out.print("관리자 아이디 : ");
+			 String adminId = Util.readLine();
+			 System.out.print("관리자 비밀번호 : ");
+			 String adminPw = Util.readLine();
+		    	
+			 if(!ADMIN_ID.equals(adminId) || !ADMIN_PW.equals(adminPw)) {
+				 System.err.println("관리자 아이디 또는 비밀번호가 일치하지 않습니다.");
+				 return;
+			 } else {
+				 ADMIN_LOGIN_STATUS = true;
+			 }
 		}
+    	
 		
 		System.out.println("1.회원관리 2.도서관리");
 		int choice = Util.readInt();
@@ -424,7 +435,7 @@ public class InMemory {
 				}
 			}
 			
-			Books books = new Books(title, author, publisher, null, null, null);
+			Books books = new Books(title, author, publisher, "", "", "");
 			booksList.add(books);
 			System.out.println("등록 되었습니다.");
 		} else {
