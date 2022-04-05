@@ -226,7 +226,7 @@ public class FileSystem {
     			bookInfo += " | " + "출판사 : " + booksArray.get(i).getPublisher();
       
     			//대여한 회원 id가 없으면 대여 가능
-    			String borrowResult = booksArray.get(i).getBorrower()=="none" ? "대여가능" : "대여중"; 
+    			String borrowResult = booksArray.get(i).getBorrower().equals("none") ? "대여가능" : "대여중"; 
     			bookInfo += " | " + "대여상태 : " + borrowResult;
     			System.out.println(bookInfo);
     			isExistList = true;
