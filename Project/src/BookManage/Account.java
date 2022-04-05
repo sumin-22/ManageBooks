@@ -1,4 +1,4 @@
-package inMemory;
+package BookManage;
 
  class Account {
 	private String name;

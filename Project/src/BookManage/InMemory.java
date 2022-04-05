@@ -1,4 +1,4 @@
-package inMemory;
+package BookManage;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -7,17 +7,19 @@ import java.util.Date;
 public class InMemory {
 	
 	//관리자 아이디와 비밀번호
-	String ADMIN_ID = "cjstk4";
+	String ADMIN_ID = "admin";
 	String ADMIN_PW = "1230";
 	
 	//관리자 로그인 상태
 	boolean ADMIN_LOGIN_STATUS = false;
-	ArrayList<Account> accountlist = new ArrayList<Account>();
+	ArrayList<Account> accountList = new ArrayList<Account>();
 	ArrayList<Books> booksList = new ArrayList<Books>();
 	
 	
 	public void membership() {
+		System.out.println("----------------------");
 		System.out.println("1.회원가입 진행 2.비밀번호 변경");
+		System.out.print("➔ ");
 		int choice = Util.readInt();
 		
 		switch (choice) {
@@ -31,14 +33,14 @@ public class InMemory {
 	}
 	
 	private void creatAccount() {
-		System.out.print("-이름 : ");
+		System.out.print("- 이름 : ");
 		String name = Util.readLine();
 		
-		System.out.print("-생년월일(ex.19951230) : ");
+		System.out.print("- 생년월일(ex.19951230) : ");
 		String birthDate = Util.readLine();
 		
 		
-		System.out.print("-핸드폰 번호(ex.010-1230-0901) : ");
+		System.out.print("- 핸드폰 번호(ex.010-1230-0901) : ");
 		String cellphone = Util.readLine();
 		
 		//중복 번호 검사
@@ -63,7 +65,7 @@ public class InMemory {
 			}
 		} while (!isNotDuplicatedId);
 		
-		System.out.print("-비밀번호 : ");
+		System.out.print("- 비밀번호 : ");
 		String password = Util.readLine();
 		
 		//회원정보 저장
@@ -74,13 +76,13 @@ public class InMemory {
 	private void saveAccount(String name, String birthDate, String cellphone, String id, String password) {
 		Account account = new Account(name, birthDate, cellphone, id, password);
 		
-		accountlist.add(account);
+		accountList.add(account);
 	}
 	
 	//폰번호 중복 검사
 	private boolean isDuplicatedphone(String cellphone) {
-		for(int i =0; i < accountlist.size(); i++) {
-			if(accountlist.get(i).getCellphone().equals(cellphone)) {
+		for(int i =0; i < accountList.size(); i++) {
+			if(accountList.get(i).getCellphone().equals(cellphone)) {
 				return true;
 			}
 		}
@@ -90,8 +92,8 @@ public class InMemory {
 	
 	//ID 중복검사
 	private boolean isDuplicatedId(String id) {
-		for(int i =0; i < accountlist.size(); i++) {
-			if(accountlist.get(i).getId().equals(id)) {
+		for(int i =0; i < accountList.size(); i++) {
+			if(accountList.get(i).getId().equals(id)) {
 				return true;
 			}
 		}
@@ -102,9 +104,9 @@ public class InMemory {
 		
 		ADMIN_LOGIN_STATUS = false;
 		
-		for(int i=0; i<accountlist.size(); i++) {
-			if(accountlist.get(i).getId().equals(id) && accountlist.get(i).getPassword().equals(password)) {
-				return accountlist.get(i);
+		for(int i=0; i<accountList.size(); i++) {
+			if(accountList.get(i).getId().equals(id) && accountList.get(i).getPassword().equals(password)) {
+				return accountList.get(i);
 			}
 		}
 		return null;
@@ -112,10 +114,10 @@ public class InMemory {
 	
 	//비밀번호 변경
 	private void changePassword() {
-		System.out.print("-아이디 : ");
+		System.out.print("- 아이디 : ");
 		String id = Util.readLine();
 		
-		System.out.print("-비밀번호 : ");
+		System.out.print("- 비밀번호 : ");
 		String password = Util.readLine();
 		
 		Account loginAccount = login(id, password);
@@ -125,18 +127,19 @@ public class InMemory {
 			return;
 		}
 		
-		System.out.print("-변경할 비밀번호 : ");
+		System.out.print("- 변경할 비밀번호 : ");
 		String newPw = Util.readLine();
+		System.out.println("비밀번호가 변경되었습니다.");
 		
-		savaPassword(id, newPw);
+		savePassword(id, newPw);
 		
 	}
 	
 	
-	private void savaPassword(String id, String password) {
-		for(int i=0; i < accountlist.size(); i++) {
-			if(accountlist.get(i).getId().equals(id)) {
-				accountlist.get(i).setPassword(password);
+	private void savePassword(String id, String password) {
+		for(int i=0; i < accountList.size(); i++) {
+			if(accountList.get(i).getId().equals(id)) {
+				accountList.get(i).setPassword(password);
 				return;
 			}
 		}
@@ -145,8 +148,11 @@ public class InMemory {
 //	-------------------------------------------------------------------
 	
 	public void login() {
+		System.out.println("------------");
 		System.out.println("1.회원 2.관리자");
+		System.out.print("➔ ");
 		int choice = Util.readInt();
+		
 		
 		switch (choice) {
 			case 1 : 
@@ -162,9 +168,9 @@ public class InMemory {
 	}
 	
 	private void memberMenu() {
-		System.out.print("아이디 : ");
+		System.out.print("- 아이디 : ");
 		String id = Util.readLine();
-		System.out.print("비밀번호 : ");
+		System.out.print("- 비밀번호 : ");
 		String password = Util.readLine();
 		
 		Account loginAccount = login(id, password);
@@ -173,7 +179,7 @@ public class InMemory {
 			System.err.println("아이디 또는 패스워드가 일치하지 않습니다.");
 			return;
 		}
-		
+		System.out.println("-------------------------------");
 		System.out.println("1.도서검색 2.대여현황 3.도서대여 4.도서반납");
 		int choice = Util.readInt();
 		
@@ -204,7 +210,7 @@ public class InMemory {
     	System.out.print("- 저자 : ");
     	String author = Util.readLine();
     	
-    	System.out.println("<도서 검색 결과>");
+    	System.out.println("\t<도서 검색 결과>\t");
     	boolean isExistList = false; 
     	
     	for(int i=0; i<booksList.size(); i++) {
@@ -229,7 +235,7 @@ public class InMemory {
 	
 	//대여현황
 	private void borrowStatus() {
-    	System.out.println("<대여 현황>");
+    	System.out.println("\t<대여 현황>\t");
     	boolean isExistList = false; 
     	
     	for(int i=0; i<booksList.size(); i++) {
@@ -346,8 +352,9 @@ public class InMemory {
 			 }
 		}
     	
-		
-		System.out.println("1.회원관리 2.도서관리");
+		System.out.println("-------------------------");
+		System.out.println("1.회원관리\t2.도서등록\t3.도서삭제");
+		System.out.print("➔");
 		int choice = Util.readInt();
 		
 		switch (choice) {
@@ -357,6 +364,10 @@ public class InMemory {
 			case 2:
 				managerBook();
 				break;
+			case 3:
+				managerBook2();
+				break;
+				
 			default:
 				System.err.println("유효하지 않은 번호입니다. 다시 입력해주세요");
 				break;
@@ -375,9 +386,9 @@ public class InMemory {
 	
 	private void memberReuslt(String name, String birthDate) {
 		Account resultAccount = null;
-		for(int i =0; i <accountlist.size(); i++) {
-			if(accountlist.get(i).getName().equals(name) && accountlist.get(i).getBirthDate().equals(birthDate)) {
-				resultAccount = accountlist.get(i);
+		for(int i =0; i <accountList.size(); i++) {
+			if(accountList.get(i).getName().equals(name) && accountList.get(i).getBirthDate().equals(birthDate)) {
+				resultAccount = accountList.get(i);
 				break;
 			}
 		}
@@ -446,6 +457,32 @@ public class InMemory {
 			System.out.println(booksList.get(i).toString());
 		}
 		
+	}
+	
+	private void managerBook2() {
+		System.out.print("- 도서명 : ");
+		String title = Util.readLine();
+		System.out.print("- 저자 : ");
+		String author = Util.readLine();
+		System.out.print("- 출판사 : ");
+		String publisher = Util.readLine();
+		
+		deletBooks(title, author, publisher);
+	}
+	
+	private void deletBooks(String title, String author, String publisher) {
+		if(title != "" && author != "" &&  publisher != "") {
+			for(int i =0; i <booksList.size(); i++) {
+				if (booksList.get(i).getTitle().equals(title) && booksList.get(i).getAuthor().equals(author) 
+						&& booksList.get(i).getPublisher().equals(publisher)) {
+					booksList.remove(i);
+					return;
+				}
+			}
+		
+	}
+			
+			
 	}
 	
 	

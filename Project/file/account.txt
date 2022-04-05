@@ -1,2 +1,1 @@
-Account [name=김태형, birthDate=19951230, cellphone=010-1230-1230, id=v, password=951230]
-Account [name=전정국, birthDate=19970901, cellphone=010-0901-0901, id=jk, password=970901]
+김태형,19951230,010-1230-1230,v,1230
