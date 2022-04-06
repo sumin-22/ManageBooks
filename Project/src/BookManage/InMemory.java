@@ -476,13 +476,16 @@ public class InMemory {
 				if (booksList.get(i).getTitle().equals(title) && booksList.get(i).getAuthor().equals(author) 
 						&& booksList.get(i).getPublisher().equals(publisher)) {
 					booksList.remove(i);
-					return;
+					break;
 				}
 			}
-			System.out.println("hello");
+			System.out.println("도서 정보가 삭제되었습니다.");
 		
 	}
-			
+		System.out.println("< 동록된 도서 리스트 >");
+		for(int i =0; i < booksList.size(); i++) {
+			System.out.println(booksList.get(i).toString());
+		}
 			
 	}
 	
