@@ -8,7 +8,7 @@ public class InMemoryMain {
 		boolean isTerminae = false;
 		do {
 			System.out.println("======== 도서관리 =======");
-			System.out.println("1.회원관리\t2.로그인\t3.종료 ");
+			System.out.println("1.회원관리\t2.로그인\t3.종료");
 			System.out.print("➔ ");
 			int choice = Util.readInt();
 			

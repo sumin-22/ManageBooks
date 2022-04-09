@@ -143,7 +143,7 @@ public class Util {
 		ArrayList<String> arrayFile = readFileLine(path);
 		
 		for(int i=0; i<arrayFile.size(); i++) {
-			String[] split = arrayFile.get(i).split(",");
+			String[] split = arrayFile.get(i).split("\t");
 			String title = split[0];
 			String author = split[1];
 			String publisher = split[2];

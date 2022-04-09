@@ -8,7 +8,7 @@ public class FileSystemMain {
 		boolean isTerminate = false;
 		do {
 			System.out.println("======== 도서관리 =======");
-			System.out.println("1.회원가입 2.로그인 3.종료");
+			System.out.println("1.회원정보\t2.로그인\t3.종료");
 			System.out.print("➔ ");
 			int choice = Util.readInt();
 			

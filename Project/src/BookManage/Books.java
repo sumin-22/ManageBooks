@@ -70,8 +70,8 @@ public class Books {
 
 	@Override
 	public String toString() {
-		return title + "," + author + "," + publisher + "," + borrower
-				+ "," + rentalDate + "," + returnDate;
+		return title+"\t"+author+"\t"+publisher+"\t"+borrower+"\t"+rentalDate+"\t"+returnDate;
+				
 	}
 	
 	

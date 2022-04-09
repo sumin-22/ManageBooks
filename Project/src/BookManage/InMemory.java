@@ -18,7 +18,7 @@ public class InMemory {
 	
 	public void membership() {
 		System.out.println("----------------------");
-		System.out.println("1.회원가입 진행 2.비밀번호 변경");
+		System.out.println("1.회원가입 진행\t2.비밀번호 변경");
 		System.out.print("➔ ");
 		int choice = Util.readInt();
 		
@@ -65,7 +65,7 @@ public class InMemory {
 			}
 		} while (!isNotDuplicatedId);
 		
-		System.out.print("- 비밀번호 : ");
+		System.out.print("-비밀번호 : ");
 		String password = Util.readLine();
 		
 		//회원정보 저장
@@ -148,8 +148,8 @@ public class InMemory {
 //	-------------------------------------------------------------------
 	
 	public void login() {
-		System.out.println("------------");
-		System.out.println("1.회원 2.관리자");
+		System.out.println("---------------");
+		System.out.println("1.회원\t2.관리자");
 		System.out.print("➔ ");
 		int choice = Util.readInt();
 		
@@ -180,7 +180,9 @@ public class InMemory {
 			return;
 		}
 		System.out.println("-------------------------------");
-		System.out.println("1.도서검색 2.대여현황 3.도서대여 4.도서반납");
+		System.out.println("1.도서검색\t2.대여현황\t3.도서대여\t4.도서반납\t5.도서목록");
+		System.out.print("➔ ");
+		
 		int choice = Util.readInt();
 		
 		switch (choice) {
@@ -196,6 +198,9 @@ public class InMemory {
 			case 4 :
 				returnBooks(loginAccount.getId());
 				break;
+			case 5 :
+				bookList();
+				break;
 			default :
 				System.err.println("유효하지 않은 번호입니다. 다시 입력해주세요");
 				break;
@@ -210,7 +215,7 @@ public class InMemory {
     	System.out.print("- 저자 : ");
     	String author = Util.readLine();
     	
-    	System.out.println("\t<도서 검색 결과>\t");
+    	System.out.println("<도서 검색 결과>");
     	boolean isExistList = false; 
     	
     	for(int i=0; i<booksList.size(); i++) {
@@ -235,7 +240,7 @@ public class InMemory {
 	
 	//대여현황
 	private void borrowStatus() {
-    	System.out.println("\t<대여 현황>\t");
+    	System.out.println("<대여 현황>");
     	boolean isExistList = false; 
     	
     	for(int i=0; i<booksList.size(); i++) {
@@ -306,7 +311,7 @@ public class InMemory {
 			}
 		}
     	
-    	System.err.print("검색된 도서가 없습니다.");
+    	System.err.println("검색된 도서가 없습니다.");
     }
 	
 	private void returnBooks(String id) {
@@ -331,6 +336,13 @@ public class InMemory {
 			}
 		}
 		System.err.println("반납할 수 있는 도서가 아닙니다.");
+	}
+	
+	private void bookList () {
+		System.out.println("제목\t저자\t출판사");
+		for(int i =0; i < booksList.size(); i++) {
+			System.out.println(booksList.get(i).toString());
+		}
 	}
 	
 
@@ -453,6 +465,8 @@ public class InMemory {
 			System.err.println("미입력 항목이 있습니다.");
 		}
 		System.out.println("< 동록된 도서 리스트 >");
+		System.out.println("제목\t저자\t출판사");
+		
 		for(int i =0; i < booksList.size(); i++) {
 			System.out.println(booksList.get(i).toString());
 		}
@@ -483,6 +497,7 @@ public class InMemory {
 		
 	}
 		System.out.println("< 동록된 도서 리스트 >");
+		System.out.println("제목\t저자\t출판사");
 		for(int i =0; i < booksList.size(); i++) {
 			System.out.println(booksList.get(i).toString());
 		}

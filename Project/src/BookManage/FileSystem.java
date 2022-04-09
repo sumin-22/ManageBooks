@@ -17,7 +17,7 @@ public class FileSystem {
 	
 	public void membership() {
 		System.out.println("----------------------");
-		System.out.println("1.회원가입 진행 2.비밀번호 변경");
+		System.out.println("1.회원가입\t2.비밀번호 변경");
 		System.out.print("➔ ");
 		int choice = Util.readInt();
 		
@@ -153,7 +153,7 @@ public class FileSystem {
 //	-------------------------------------------------------------------
 	public void login() {
 		System.out.println("------------");
-		System.out.println("1.회원 2.관리자");
+		System.out.println("1.회원\t2.관리자");
 		System.out.print("➔ ");
 		int choice = Util.readInt();
 		
@@ -184,7 +184,7 @@ public class FileSystem {
 		}
     	
     	System.out.println("-------------------------------");
-		System.out.println("1.도서검색 2.대여현황 3.도서대여 4.도서반납");
+		System.out.println("1.도서검색\t2.대여현황\t3.도서대여\t4.도서반납\t5.도서목록");
         int choice = Util.readInt();
         
         switch (choice) {
@@ -199,6 +199,9 @@ public class FileSystem {
 	            break;
 	        case 4: 
 	        	returnBooks(loginAccount.getId());
+	        	break;
+	        case 5:
+	        	bookList();
 	        	break;
 	        default:
 	        	System.err.println("유효하지 않은 번호입니다. 다시 입력해주세요");
@@ -367,6 +370,18 @@ public class FileSystem {
     		}
 	    }
 	}
+	
+	
+	private void bookList () {
+		ArrayList<Books> booksArray = Util.fileToBooks("./file/books.txt");
+		System.out.println("<등록된 도서 리스트>");
+		System.out.println("제목\t저자\t출판사\t대여자\t대여일\t반납일");
+		booksArray = Util.fileToBooks("./file/books.txt");
+		for(int i=0; i<booksArray.size(); i++) {
+			System.out.println(booksArray.get(i).toString());
+		}
+		
+	}
 // -------------------------------------------------------------------
 	
 	private void adminMenu() {
@@ -406,6 +421,10 @@ public class FileSystem {
 	        case 2: 
 	            manageBooks();
 	            break;
+	        case 3:
+	        	manageBooks2();
+	        	break;
+	    
 	        default:
 	        	System.err.println("유효한 번호가 입력되지 않았습니다.");
 	        	break;
@@ -506,10 +525,48 @@ public class FileSystem {
 		} 
 		
 		
-		System.out.println("   <등록된 도서 리스트>   ");
+		System.out.println("<등록된 도서 리스트>");
+		System.out.println("제목\t저자\t출판사\t대여자\t대여일\t반납일");
 		booksArray = Util.fileToBooks("./file/books.txt");
 		for(int i=0; i<booksArray.size(); i++) {
 			System.out.println(booksArray.get(i).toString());
+		}
+	}
+	
+	private void manageBooks2() {
+    	System.out.print("- 도서명 : ");
+    	String title = Util.readLine();
+    	
+    	System.out.print("- 저자 : ");
+    	String author = Util.readLine();
+    	
+    	System.out.print("- 출판사 : ");
+    	String publisher = Util.readLine();
+    	
+    	deleteBooks(title, author, publisher);
+    }
+	
+	private void deleteBooks(String title, String author, String publisher) {
+		ArrayList<Books> booksArray;
+		booksArray = Util.fileToBooks("./file/books.txt");
+		
+		
+		if(title != "" && author != "" && publisher != "") {
+			ArrayList<String> writeArray = new ArrayList<String>();
+			for(int i=0; i<booksArray.size(); i++) {
+				if(booksArray.get(i).getTitle().equals(title) & booksArray.get(i).getAuthor().equals(author)
+						&& booksArray.get(i).getPublisher().equals(publisher)) {
+					booksArray.remove(i);
+					break;
+				}
+			}
+			
+			for(int i =0; i<booksArray.size(); i++) {
+				writeArray.add(booksArray.get(i).toString() + "\r\n");				
+			}
+			Util.updateFile("./file/books.txt", writeArray);
+			System.out.println("도서 정보가 삭제되었습니다.");
+
 		}
 	}
 	
